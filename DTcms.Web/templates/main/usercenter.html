@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>我的 - {site.name}</title>
+    <link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+    <link href="<%templateskin%>/css/app.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="<%templateskin%>/css/swiper.css" />
+    <script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+
+
+</head>
+
+<body>
+
+    <%if(action=="index")%>
+    <div class="page-group">
+        <div id="" class="page page-current">
+            <header class="bar bar-nav">
+                <h1 class="title">读经计划</h1>
+            </header>
+            <nav class="bar bar-tab">
+                <a class="tab-item external" href="<%linkurl("article_list",1054)%>">
+                    <span class="icon icon-home"></span>
+                    <span class="tab-label">读经教育理念</span>
+                </a>
+                <a class="tab-item external active" href="<%linkurl("usercenter2","index")%>">
+                    <span class="icon icon-me"></span>
+                    <span class="tab-label">我</span>
+                </a>
+            </nav>
+            <div class="content">
+                <div style="margin:6rem 0 0 0">
+                    <%if(!string.IsNullOrEmpty(InviterName))%>
+                    <p style="font-size:.7rem; text-align:center; color:#229073">您的悦读推荐人：<u><%=InviterName %></u></p>
+                    <%/if%>
+                    <ul style=" ">
+                        <li onclick="location='calendar.aspx'">
+                            <div class="item-inner" style=" text-align:center;margin:1.3rem auto;padding:0; border:none; color:#229073;">
+                                今日读经
+                            </div>
+                        </li>
+                        <li onclick="location='userreadlog.aspx?action=zhengben'">
+                            <div class="item-inner" style=" text-align:center;margin:1.3rem auto;padding:0; border:none; color:#229073;">
+                                我的读经
+                            </div>
+                        </li>
+                        <li onclick="location='news.aspx'">
+                            <div class="item-inner" style=" text-align:center;margin:1.3rem auto;padding:0; border:none; color:#229073;">
+                                读经计划
+                            </div>
+                        </li>
+                        <li onclick="location='{config.webpath}api/payment/wxapipay/index.aspx?pay_order_no={pay_id}&pay_order_amount=988'">
+                            <div class="item-inner" style=" text-align:center;margin:1.3rem auto;padding:0; border:none; color:#229073;">
+                                升级为VIP
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%/if%>
+
+</body>
+</html>

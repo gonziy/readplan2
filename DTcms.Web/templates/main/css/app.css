@@ -1,0 +1,76 @@
+﻿/* HTML5 */
+body{ margin:0; padding:0;}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, button{padding:0; margin:0;}
+fieldset, img, button, input{border:0;}
+h1,h2,h3,h4,h5,h6,button,input,select,textarea{font-size:100%}
+table{border-collapse:collapse; border-spacing:0;}
+section, article, aside, header, footer, nav, figure{ display: block;}
+fieldset,img{border:0;}
+table{border-collapse:collapse;border-spacing:0}
+ul,ol{list-style:none}
+li{ list-style-type:none;}
+a{ text-decoration:none;}
+a:hover{text-decoration:underline;}
+sup{vertical-align:text-top;}
+sub{vertical-align:text-bottom;}
+legend{color:#000}
+small{font-size:12px}
+address,cite,dfn,em,var{font-style:normal}
+code,kbd,pre,samp{font-family:courier new,courier,monospace}
+.clear{ width:100%; height:0; float:none; clear:both; font-size:0; line-height:0;}
+
+.left{ float:left}
+.right{float: right;}
+.content{ background:url(../images/bg.jpg) no-repeat #fff; background-size:100%;}
+.textcenter{text-align:center;}
+
+.selectbookds{ width:100%; display:table; margin-top:.5rem;}
+.selectbookds li{ width:50%; text-align:center; display:block;float:left;}
+.selectbookds li .book_img{ width:50%; height:auto;}
+.selectbookds li h4{ width:100%; height:auto; line-height:.8rem; color:#333; text-align:center; margin-top:.5rem; margin-bottom:1rem; color:#333;font-size:.75rem; font-weight:normal;}
+.selectbookds li a{}
+
+#calendar .thisMonth{ width:100%; display:block; background:#ff5e5e; border-radius:.5rem; overflow:hidden; padding-top:.5rem; padding-bottom:.5rem;}
+#calendar .thisMonth a{ width:14.28%; display:block; float:left; height:2rem; line-height:1.8rem; text-align:center; color:#fff; font-size:.7rem;border:1px solid #ff5e5e;}
+#calendar .thisMonth a .failed{ display:block; background:#fff; border-radius:.2rem; width:.2rem; height:.2rem; margin:0 auto;}
+#calendar .thisMonth .today{ border:1px solid #fff; border-radius:50% 50%;}
+.read-title{ width:100%; height:1.8rem; line-height:1.8rem; background:#f7f7f7; color:#229073; border-bottom:1px solid #cfcfcf; text-align:center; font-weight:bold;}
+.read-plan{ width:100%; margin-top:.5rem;}
+.read-plan li{ font-size:.65rem; line-height:1.8rem; height:1.8rem;}
+.read-plan li span{font-size:.65rem;}
+#calendar .months{ width:100%;}
+#calendar .months .col-25{ font-size:.7rem; height:1.5rem; line-height:1rem; padding-top:.2rem;}
+#calendar .months .col-25 .thisM{ font-size:.9rem; color:#ff5e5e;}
+#calendar .months .col-15.thisM{ background:#ff5e5e; color:#fff; border-radius:.6rem .6rem 0 0; overflow:hidden;}
+#calendar .months .col-15{ font-size:.75rem; color:#888; text-align:center; height:1.5rem; line-height:1rem; padding-top:.2rem;}
+#calendar .months .col-15 a{ color:#888;}
+#calendar .months .col-15.thisM a{ color:#fff;}
+.read-plan .complete a{ font-size:.6rem; color:#fff; height:1.2rem;line-height:1.2rem; margin-top:.3rem; width:auto; padding:0 .1rem;background:#f5a623; border-radius:1rem; display:block; }
+
+#alertbox {
+}
+#alertbox .wrap-box {
+    margin:1rem; background:#fff; padding:1rem 1rem; border-radius:.5rem; box-shadow:0 0 .4rem #ccc;
+}
+    #alertbox .wrap-box h2 {
+        text-align: center;
+		font-size:1rem;
+    }
+
+    #alertbox .wrap-box dl {
+        width: 100%;
+        height: 1.6rem;
+        display: block;
+    }
+    #alertbox .wrap-box dt {
+		font-size:.7rem;
+        width: 30%;
+        float: left;
+    }
+    #alertbox hr{ height:0; border:none; overflow:hidden; border-bottom:1px dashed #999;}
+	#alertbox .wrap-box dd {
+		font-size:.7rem;
+        width: 70%;
+        float: right;
+        margin: 0;
+    }

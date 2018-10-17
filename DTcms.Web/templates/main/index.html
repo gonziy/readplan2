@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>我的 - {site.name}</title>
+    <link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+    <link href="<%templateskin%>/css/app.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+
+</head>
+
+<body>
+    <%csharp%>
+    List<DTcms.Model.users> userlist = new List<DTcms.Model.users>();
+    bool is_pay = false;
+    string openid = "";
+	string pay_id = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+    openid = DTcms.Common.DTRequest.GetString("openid");
+            if (string.IsNullOrEmpty(openid))
+            {
+                openid = DTcms.Common.Utils.GetCookie("openid");
+            }
+            DTcms.BLL.users bll = new DTcms.BLL.users();
+			if(!string.IsNullOrEmpty(openid))
+			{
+				if (bll.ExistsWxOpenID(openid))
+				{
+					userlist.AddRange(bll.GetModelByWx(openid));
+					if (userlist != null)
+					{
+						if (userlist.Count > 0)
+						{
+							is_pay = true;
+						}
+					}
+				}else{
+				
+					DTcms.Model.UserPay userPay = new DTcms.Model.UserPay();
+					userPay.add_time = DateTime.Now;
+					userPay.amount = 9.28M;
+					userPay.id = pay_id;
+					userPay.openid = openid;
+					userPay.status = 0;
+					new DTcms.BLL.UserPay().Add(userPay);
+				}
+
+			 <%/csharp%>
+			 <div class="page-group">
+        <div id="" class="page page-current">
+            <header class="bar bar-nav">
+                <h1 class="title">选择账户</h1>
+            </header>
+            <div class="content">
+				<p style=" width:100%; font-size:1.4rem; text-align:center; color:#229073; margin:1.2rem auto;">
+				读，见真知
+				</p>
+                
+                        <%if(is_pay)%>
+							<%if(userlist!=null)%>
+								<div style="margin:0">
+								<ul style=" background:url('<%templateskin%>/images/account_bg.png') no-repeat; background-size:100%;">
+								<%set int num = 1%>
+								<%foreach(DTcms.Model.users model in userlist)%>
+								<%if(model.is_show==1)%>
+								<%if(num==1)%>
+								<li onclick="location='autologin.aspx?username={model.user_name}'">
+									<div class="item-inner" style=" text-align:center;margin:1.3rem auto;padding:0; border:none; color:#fff;">
+										{model.nick_name}
+									</div>
+								</li>
+								<%else%>
+								<li onclick="location='autologin.aspx?username={model.user_name}'">
+									<div class="item-inner" style=" text-align:center;margin:1.3rem auto;padding:0; border:none; color:#229073;">
+										{model.nick_name}
+									</div>
+								</li>
+								<%/if%>
+								<%/if%>
+								<%csharp%>
+								num++;
+								<%/csharp%>
+								<%/foreach%>
+								</ul>
+								</div>
+							<%/if%>
+                        <%else%>
+						<div class="list-block" style="margin:0">
+							<ul>
+								<li class="item-content item-link" onclick="location='{config.webpath}api/payment/wxapipay/index.aspx?pay_order_no={pay_id}&pay_order_amount=9.28'">
+									<div class="item-media"><i class="icon icon-f7"></i></div>
+									<div class="item-inner">
+										<div class="item-title" style=" color:#229073;">开通帐户</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+                        <%/if%>
+				<div class="content-padded">
+					<p style="font-size:.65rem; color:#229073; line-height:2">
+					
+					</p>
+				</div>
+            </div>
+        </div>
+    </div>
+			  <%csharp%>
+			}else{
+			<%/csharp%>
+			 <div class="page-group">
+				<div id="" class="page page-current">
+					<header class="bar bar-nav">
+						<h1 class="title">选择账户</h1>
+					</header>
+					<div class="content">
+						<div class="list-block" style="margin:0">
+							<ul>
+								<li class="item-content item-link" onclick="location='wx_login.aspx'">
+									<div class="item-media"><i class="icon icon-f7"></i></div>
+									<div class="item-inner">
+										<div class="item-title" style=" color:#229073;">获取账户信息失败,点此刷新</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="content-padded">
+							<p style="font-size:.65rem; color:#229073; line-height:2">
+							*本读经打卡软件旨在于培养在全日制读经学堂外读经习惯的养成，帮助营造经典书香家庭氛围，辅助家长养成读经习惯。</p>
+							<p style="font-size:.65rem; color:#229073; line-height:2">
+								* 长期坚持使用打卡软件，读经量实现积累之后，孩子将来入读学堂，部分学堂将对坚持在家读经孩子学费优惠。
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			  <%csharp%>
+			}
+    <%/csharp%>
+    
+</body>
+</html>

@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+<title>读经记录 - {site.name}</title>
+<meta name="keywords" content="{site.seo_keyword}" />
+<meta name="description" content="{site.seo_description}" />
+    <link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+    <link href="<%templateskin%>/css/app.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="<%templateskin%>/css/swiper.css" />
+    <script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="<%templateskin%>/plugins/layer/layer.js?v=2"></script>
+</head>
+
+<body>
+
+
+
+    <%if {action}=="zhengben"%>
+
+    <%set List<DTcms.Model.UserReadBook> list = get_user_read_book_list("user_id='"+userModel.id +"'")%>
+	<div class="page-group">
+        <div id="" class="page page-current">
+			<header class="bar bar-nav">
+				<a class="button button-link button-nav pull-left back" href="<%linkurl("usercenter","index")%>">
+					<span class="icon icon-left"></span>
+				</a>
+				<h1 class="title">我的读经</h1>
+			</header>
+            <div class="content">
+			
+
+                <div class="banner" style=" position:relative;">
+                    <div class="my-info" style=" position:absolute; left:4.5rem; top:1.5rem; font-size:.75rem; z-index:9;">
+						<img src="<%templateskin%>/images/face_icon.png" style=" position:absolute; left:-4rem; top:-.5rem; font-size:.75rem; z-index:9; width:3rem;height:3rem;" />
+                        昵称：{userModel.nick_name}<br />
+                        等级：{groupModel.title}
+                    </div>
+                    <div id="banner" class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <%set DataTable adList=get_article_list("article", 1053, 5,"status=0")%><!--取得一个分页DataTable-->
+                            <%foreach(DataRow dr in adList.Rows)%>
+                            <div style='width: 100%; height: 7rem' class="swiper-slide"><img style="width:100%" src="{dr[img_url]}" /></div>
+                            <%/foreach%>
+
+                        </div>
+                    </div>
+                </div>
+
+				<div class="buttons-tab">
+				  <a href="#tab1" class="tab-link active button">已读完整经典</a>
+				  <a href="?action=lingsan" class="tab-link button">已读零散经典</a>
+				</div>
+				<div class="tabs">
+					<div id="tab1" class="tab active">
+							<div class="list-block" style="margin:0">
+								<ul>
+								<%if(list.Count>0)%>
+								    <%foreach(DTcms.Model.UserReadBook book in list)%>
+
+									<li class="item-content">
+										<div class="item-media"><i class="icon icon-f7"></i></div>
+										<div class="item-inner">
+                                            <div class="item-title">《<%=get_category_title(DTcms.Common.TypeConverter.ObjectToInt(book.category_id),"unknow")%>》</div>
+											<div class="item-after"><span class="badge">{book.count}</span></div>
+										</div>
+									</li>
+                                    <%/foreach%>
+								<%else%>
+										<li class="item-content">
+											<div class="item-inner" style="text-align:center;">
+												<div class="item-title">暂无记录</div>
+											</div>
+										</li>
+								<%/if%>
+								</ul>
+							</div>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+   
+
+    <%else if(action=="lingsan")%>
+
+    <%set List<DTcms.Model.UserReadLog> list = get_user_read_log_list(" read_type='1' and user_id='"+userModel.id +"' and (read_count-compose_count>'0')")%>
+	<%set List<DTcms.Model.UserReadLog> newlist = new List<DTcms.Model.UserReadLog>() %>
+	<%set int now_category_id = 0 %>
+	<%set int now_category_id_count = 0 %>
+	<%set string now_category_title = "" %>
+	<%set int now_article_id = 0 %>
+	<%set int now_article_id_count = 0 %>
+	<%set string now_article_title = "" %>
+
+
+	<%set List<DTcms.Model.ComposeList> composeList = get_user_compose_list(userModel.id)%>
+	<div class="page-group">
+        <div id="" class="page page-current">
+		
+			<header class="bar bar-nav">
+				<a class="button button-link button-nav pull-left back" href="<%linkurl("usercenter","index")%>">
+					<span class="icon icon-left"></span>
+				</a>
+				<h1 class="title">我的读经</h1>
+			</header>
+            <div class="content">
+				<%if(composeList.Count>0)%>
+				<script>
+				layer.open({
+					content: '<div style="padding:3rem 0;">您的零散读经可以合成为整本,是否合成？</div>'
+					,btn: ['合成', '取消']
+					,yes: function(index){
+					  location.href="userreadlog.aspx?action=hecheng"
+					}
+				  });
+				</script>
+				<%/if%>
+				<div style="position:fixed;z-index:9999;">
+                <div class="banner" style=" position:relative;">
+                    <div class="my-info" style=" position:absolute; left:4.5rem; top:1.5rem; font-size:.75rem; z-index:9;">
+						<img src="<%templateskin%>/images/face_icon.png" style=" position:absolute; left:-4rem; top:-.5rem; font-size:.75rem; z-index:9; width:3rem;height:3rem;" />
+                        昵称：{userModel.nick_name}<br />
+                        等级：{groupModel.title}
+                    </div>
+                    <div id="banner" class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <%set DataTable adList=get_article_list("article", 1053, 5,"status=0")%><!--取得一个分页DataTable-->
+                            <%foreach(DataRow dr in adList.Rows)%>
+                            <div style='width: 100%; height: 7rem' class="swiper-slide"><img style="width:100%" src="{dr[img_url]}" /></div>
+                            <%/foreach%>
+
+                        </div>
+                    </div>
+                </div>
+				</div>
+
+
+				<div class="buttons-tab" style="margin-top:7rem">
+				  <a href="?action=zhengben" class="tab-link button">已读完整经典</a>
+				  <a href="#tab2" class="tab-link active button">已读零散经典</a>
+				</div>
+				<div class="tabs">
+					<div id="tab1" class="tab active">
+							<div class="list-block" style="margin:0">
+                                <ul>
+                                    <%if(list.Count>0)%>
+                                    <%foreach(DTcms.Model.UserReadLog log in list)%>
+                                    <%csharp%>
+                                    if(now_article_id != DTcms.Common.TypeConverter.ObjectToInt(log.article_id))
+                                    {
+                                    now_article_id_count=0;
+                                    now_article_id_count+= DTcms.Common.TypeConverter.ObjectToInt(log.read_count);
+                                    now_article_title = get_article(DTcms.Common.TypeConverter.ObjectToInt(log.article_id)).title;
+                                    now_category_title = get_article_category(DTcms.Common.TypeConverter.ObjectToInt(log.category_id)).title;
+                                    now_article_id = DTcms.Common.TypeConverter.ObjectToInt(log.article_id);
+
+                                    newlist.Add(log);
+                                    }else{
+                                    now_article_id_count+= DTcms.Common.TypeConverter.ObjectToInt(log.read_count);
+                                    newlist.Find(x => x.article_id.ToString() == DTcms.Common.TypeConverter.ObjectToInt(log.article_id).ToString()).read_count += DTcms.Common.TypeConverter.ObjectToInt(log.read_count);
+                                    }
+                                    <%/csharp%>
+
+                                    <%/foreach%>
+                                    <%foreach(DTcms.Model.UserReadLog log in newlist)%>
+                                    <%if(DTcms.Common.TypeConverter.ObjectToInt(DTcms.Common.TypeConverter.ObjectToInt(log.read_count)-DTcms.Common.TypeConverter.ObjectToInt(log.compose_count))>0)%>
+                                    <li class="item-content">
+                                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                                        <div class="item-inner">
+                                            <div class="item-title">《{get_article_category(DTcms.Common.TypeConverter.ObjectToInt(log.category_id)).title}》{get_article(DTcms.Common.TypeConverter.ObjectToInt(log.article_id)).title}</div>
+                                            <div class="item-after">已读<%=DTcms.Common.TypeConverter.ObjectToInt(DTcms.Common.TypeConverter.ObjectToInt(log.read_count)-DTcms.Common.TypeConverter.ObjectToInt(log.compose_count)) %>遍</div>
+                                        </div>
+                                    </li>
+                                    <%/if%>
+                                    <%/foreach%>
+                                    <%else%>
+                                    <li class="item-content">
+                                        <div class="item-inner" style="text-align:center;">
+                                            <div class="item-title">暂无记录</div>
+                                        </div>
+                                    </li>
+                                    <%/if%>
+                                </ul>
+							</div>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+    <%else if(action=="hecheng")%>
+	<script type="text/javascript">
+        function compose(category_id){
+			var user_id = "<%=GetUserInfo().id.ToString()%>";
+			$.post("{config.webpath}tools/submit_ajax.ashx?action=compose",{user_id:user_id,category_id:category_id},function (data) {
+				var jsonObject = eval("("+data+")");
+				if(jsonObject.status==1) {
+					layer.open({
+					  content: jsonObject.msg
+					  ,time: 5
+					  ,skin: 'msg'
+					});
+					setTimeout("location.reload()",5000);
+				}else if(jsonObject.status==99) {
+					layer.open({
+					  content: '<img style="width:100%; margin:0 auto;" src="<%templateskin%>/images/group_'+jsonObject.group_id+'.png" />'
+					  ,style: 'text-align:center; background:none; border:none;' //自定风格
+					  ,time: 500
+					});
+					setTimeout("location.reload()",5000);
+				}else{
+					layer.open({
+					  content: jsonObject.msg
+					  ,time: 5
+					  ,skin: 'msg'
+					});
+					setTimeout("location.reload()",5000);
+				}
+			})
+		}
+    </script>
+    <%set List<DTcms.Model.ComposeList> list = get_user_compose_list(userModel.id)%>
+
+	<div class="page-group">
+        <div id="" class="page page-current">
+		
+			<header class="bar bar-nav">
+				<a class="button button-link button-nav pull-left back" href="<%linkurl("usercenter2","index")%>">
+					<span class="icon icon-left"></span>
+				</a>
+                <h1 class="title">零散读经合成</h1>
+			</header>
+            <div class="content">
+				<div class="tabs">
+					<div id="tab1" class="tab active">
+							<div class="list-block" style="margin:0">
+								<ul>
+								<%if(list.Count>0)%>
+								<%foreach(DTcms.Model.ComposeList compose in list)%>
+								<li class="item-content">
+										<div class="item-media"><i class="icon icon-f7"></i></div>
+										<div class="item-inner">
+											<div class="item-title">《{compose.category_title}》可合成{compose.count}本</div>
+											<div class="item-after"><a href="javascript:;" onclick="compose('{compose.category_id}')">合成</a></div>
+										</div>
+									</li>
+								<%/foreach%>
+								<%else%>
+										<li class="item-content">
+											<div class="item-inner" style="text-align:center;">
+												<div class="item-title">暂无可合成经书</div>
+											</div>
+										</li>
+								<%/if%>
+								</ul>
+							</div>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+    <%/if%>
+
+    <script type="text/javascript" src="<%templateskin%>/js/swiper.jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var swiper = new Swiper('.swiper-container', {
+                loop: true,
+                autoplay: 5000
+            });
+        })
+    </script>
+
+</body>
+</html>

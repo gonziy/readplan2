@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <%set string category_title=get_category_title(model.category_id,"文章")%>
+    <title>{model.title}</title>
+    <link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+    <link href="<%templateskin%>/css/app.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+</head>
+
+<body>
+<div class="page-group">
+    <div id="" class="page page-current">
+		<header class="bar bar-nav">
+			<a class="button button-link button-nav pull-left back" href="<%linkurl("article_list",1054)%>" style=" top:0;">
+				<span class="icon icon-left"></span>
+			</a>
+			<h1 class="title">读经计划</h1>
+		</header>
+        <nav class="bar bar-tab">
+            <a class="tab-item external active" href="<%linkurl("article_list",1054)%>">
+                <span class="icon icon-home"></span>
+                <span class="tab-label">读经教育理念</span>
+            </a>
+            <a class="tab-item external" href="wx_login.aspx">
+                <span class="icon icon-me"></span>
+                <span class="tab-label">账户选择</span>
+            </a>
+        </nav>
+        <div class="content" id="article-content" style="padding:.8rem; font-size:.7rem;">
+            {model.content}
+        </div>
+    </div>
+</div>
+</body>
+</html>

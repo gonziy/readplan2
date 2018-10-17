@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>计划日历 - {site.name}</title>
+<link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+<link href="<%templateskin%>/css/app.css?v=2" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%templateskin%>/plugins/layer/layer.js?v=2"></script>
+<script type="text/javascript" charset="utf-8">
+	$(function(){
+		$("#calendar .thisMonth a").height($("#calendar .thisMonth a").width());
+	})
+</script>
+<script type="text/javascript">
+	function readbook(category_id,article_id,read_count,date_str) {
+        var user_id = "<%=GetUserInfo().id.ToString()%>";
+	    $.post("{config.webpath}tools/submit_ajax.ashx?action=plan_read",{user_id:user_id,category_id:category_id,article_id:article_id,read_count:read_count,date_str:date_str},function (data) {
+            var jsonObject = eval("("+data+")");
+            if(jsonObject.status==1) {
+				layer.open({
+				  content: jsonObject.msg
+				  ,time: 5
+				  ,skin: 'msg'
+				});
+				setTimeout("location.reload()",5000);
+            }else if(jsonObject.status==99) {
+				layer.open({
+				  content: '<img style="width:100%; margin:0 auto;" src="<%templateskin%>/images/group_'+jsonObject.group_id+'.png" />'
+				  ,style: 'text-align:center; background:none; border:none;' //自定风格
+				  ,time: 500
+				});
+				setTimeout("location.reload()",5000);
+            }else{
+				layer.open({
+				  content: jsonObject.msg
+				  ,time: 5
+				  ,skin: 'msg'
+				});
+				setTimeout("location.reload()",5000);
+			}
+        })
+    }
+</script>
+
+
+</head>
+
+<body>
+<div class="page-group">
+	<div id="" class="page page-current">
+		<header class="bar bar-nav">
+			<a class="button button-link button-nav pull-left back" href="<%linkurl("usercenter","index")%>">
+				<span class="icon icon-left"></span>
+			</a>
+			<h1 class="title">读经计划</h1>
+		</header>
+        <nav class="bar bar-tab">
+            <a class="tab-item external" href="<%linkurl("article_list",1054)%>">
+                <span class="icon icon-home"></span>
+                <span class="tab-label">读经教育理念</span>
+            </a>
+            <a class="tab-item external active" href="<%linkurl("usercenter","index")%>">
+                <span class="icon icon-me"></span>
+                <span class="tab-label">我</span>
+            </a>
+        </nav>
+		<div class="content">
+            <div class="content-padded">
+                <div id="calendar">
+					<div class="months">
+						<div class="row">
+							<div class="col-25">{year}&nbsp;/&nbsp;<span class="thisM">{month}</span></div>
+							<div class="col-15"><a href="?day={pre2_year_month}01"><%=pre2_year_month.Substring(4,2)%>月</a></div>
+							<div class="col-15"><a href="?day={pre1_year_month}01"><%=pre1_year_month.Substring(4,2)%>月</a></div>
+							<div class="col-15 thisM"><a href="?day={year}{month}01">{month}月</a></div>
+							<div class="col-15"><a href="?day={aft1_year_month}01"><%=aft1_year_month.Substring(4,2)%>月</a></div>
+							<div class="col-15"><a href="?day={aft2_year_month}01"><%=aft2_year_month.Substring(4,2)%>月</a></div>
+						</div>
+					</div>
+					<div class="thisMonth">
+						<%csharp%>
+						foreach(string d in daysInMonth)
+						{
+							if(d==date)
+							{
+							<%/csharp%>
+							<a class="today" href="calendar.aspx?day={year}{month}{d}">
+								{d}
+								<%csharp%>
+								if(!CompletePlan(GetUserInfo().id.ToString(),year+month+d))
+								{
+								<%/csharp%>
+								<span class="failed"></span>
+								<%csharp%>
+								}
+								<%/csharp%>
+							</a>
+							<%csharp%>
+							}
+							else
+							{
+							<%/csharp%>
+                            <a href="calendar.aspx?day={year}{month}{d}">
+                                {d}
+                                <%csharp%>
+                                if(!CompletePlan(GetUserInfo().id.ToString(),year+month+d))
+                                {
+                                <%/csharp%>
+                                <span class="failed"></span>
+                                <%csharp%>
+                                }
+                                <%/csharp%>
+                            </a>
+							<%csharp%>
+							}
+						}
+						<%/csharp%>
+						<div class="clear"></div>
+					</div>
+                </div>
+				<div class="read-title">今日应读内容</div>
+				<div class="read-plan">
+					<ul>
+						<li class="row">
+							<div class="col-50" style="text-align:left"><b>书名/章节</b></div>
+							<div class="col-20 textcenter" style="width: 16%; margin-left: 4%"><b>遍数</b></div>
+							<div class="col-30 textcenter">&nbsp;</div>
+						</li>
+					<%csharp%>
+					if(list!=null)
+					{
+						if(list.Count>0)
+						{
+							foreach(DTcms.Model.UserReadLog model in list)
+							{
+								if(DTcms.Common.TypeConverter.ObjectToInt(model.read_type)==1)
+								{
+								<%/csharp%>
+								<li class="row">
+									<div class="col-50"><%=GetArticleTitle(model.article_id)%></div>
+									<div class="col-20 textcenter" style="width: 16%; margin-left: 4%"><%=(DTcms.Common.TypeConverter.ObjectToInt(model.plan_read_count) - DTcms.Common.TypeConverter.ObjectToInt(model.read_count))%></div>
+									<%csharp%>
+									if(DTcms.Common.TypeConverter.ObjectToDateTime(year+"/"+month+"/"+date)>DateTime.Now)
+									{
+									<%/csharp%>
+									<div class="col-30 textcenter complete" style="width: 26%; margin-left: 4%"><a href="javascript:;" onclick="readbook('{model.category_id}','{model.article_id}','1','{year}{month}{date}')">完成一遍</a></div>
+									<%csharp%>
+									}
+									else
+									{
+									<%/csharp%>
+									<div class="col-30 textcenter complete" style="width: 26%; margin-left: 4%"><a href="javascript:;" onclick="readbook('{model.category_id}','{model.article_id}','1','{year}{month}{date}')">完成一遍</a></div>
+									<%csharp%>
+									}
+									<%/csharp%>
+								</li>
+								<%csharp%>
+								}
+								else if(DTcms.Common.TypeConverter.ObjectToInt(model.read_type)==0)
+								{
+								<%/csharp%>
+								<li class="row">
+									<div class="col-50"><%=GetCategoryTitle(model.category_id)%></div>
+									<div class="col-20 textcenter" style="width: 16%; margin-left: 4%"><%=(DTcms.Common.TypeConverter.ObjectToInt(model.plan_read_count) - DTcms.Common.TypeConverter.ObjectToInt(model.read_count))%></div>
+									<%csharp%>
+									if(DTcms.Common.TypeConverter.ObjectToDateTime(year+"/"+month+"/"+date)>DateTime.Now)
+									{
+									<%/csharp%>
+									<div class="col-30 textcenter complete" style="width: 26%; margin-left: 4%"><a href="javascript:;" onclick="readbook('{model.category_id}','','1','{year}{month}{date}')">完成一遍</a></div>
+									<%csharp%>
+									}
+									else
+									{
+									<%/csharp%>
+									<div class="col-30 textcenter complete" style="width: 26%; margin-left: 4%"><a href="javascript:;" onclick="readbook('{model.category_id}','','1','{year}{month}{date}')">完成一遍</a></div>
+									<%csharp%>
+									}
+									<%/csharp%>
+
+								</li>
+								<%csharp%>
+								}
+							}
+						}
+						else
+						{
+						<%/csharp%>
+						<li class="row">
+							<div class="col-100 textcenter">暂无任务</div>
+						</li>
+						<%csharp%>
+						}
+					}
+					else
+					{
+					<%/csharp%>
+					<li class="row">
+						<div class="col-100 textcenter">暂无任务</div>
+					</li>
+					<%csharp%>
+					}
+					<%/csharp%>
+					</ul>
+				</div>
+			</div>
+	    </div>
+    </div>
+</div>
+
+</body>
+</html>

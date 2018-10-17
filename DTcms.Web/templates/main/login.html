@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>登录 - {site.name}</title>
+    <link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+    <link href="<%templateskin%>/css/app.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/common.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%templateskin%>/js/login-validate.js"></script>
+</head>
+
+<body>
+
+    <div class="page-group">
+        <div id="" class="page page-current">
+            <header class="bar bar-nav">
+                <h1 class="title">登录</h1>
+            </header>
+
+            <div class="content">
+                <div class="list-block">
+                    <div id="loginbox">
+                        <form class="am-form am-form-horizontal" id="loginform" name="loginform" url="{config.webpath}tools/submit_ajax.ashx?action=user_login&site={site.build_path}">
+                            <ul>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-input">
+                                                <input type="text" id="txtUserName" name="txtUserName" placeholder="手机号/用户名" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-input">
+                                                <input type="password" id="txtPassword" name="txtPassword" placeholder="请输入密码" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="content-padded">
+                                <input id="btnSubmit" name="btnSubmit" type="submit" value="登录" class="button button-big button-fill button-danger" />
+                            </div>
+                            <div class="content-padded">
+                                <a href="{config.webpath}wx_login.aspx" class="button button-big button-fill">微信一键登录</a>
+                            </div>
+                            <input id="turl" name="turl" type="hidden" value="{turl}" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

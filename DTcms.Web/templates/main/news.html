@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>选择书籍 - {site.name}</title>
+<link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+<link href="<%templateskin%>/css/app.css?v=2" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://m.sui.taobao.org/assets/js/zepto.js"></script>
+
+</head>
+
+<body>
+<div class="page-group">
+    <div id="" class="page page-current">
+        <header class="bar bar-nav">
+            <a class="button button-link button-nav pull-left back" href="<%linkurl("usercenter","index")%>">
+                <span class="icon icon-left"></span>
+            </a>
+            <h1 class="title">选择书籍</h1>
+        </header>
+        <nav class="bar bar-tab">
+            <a class="tab-item external" href="<%linkurl("article_list",1054)%>">
+                <span class="icon icon-home"></span>
+                <span class="tab-label">读经教育理念</span>
+            </a>
+            <a class="tab-item external active" href="<%linkurl("usercenter","index")%>">
+                <span class="icon icon-me"></span>
+                <span class="tab-label">我</span>
+            </a>
+        </nav>
+        <div class="content">
+            <!--books-->
+            <ul class="selectbookds">
+                <%set DataTable categoryList1=get_category_child_list("news", 3)%>
+                <%foreach(DataRow cdr1 in categoryList1.Rows)%>
+                <li>
+                    <a href="<%linkurl("news_list",{cdr1[id]})%>" external>
+                        <img src="{cdr1[img_url]}" class="book_img" />
+                        <h4>{cdr1[title]}</h4>
+                    </a>
+                </li>
+                <%/foreach%>
+            </ul>
+            <!--books-->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

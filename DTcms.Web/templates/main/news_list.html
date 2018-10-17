@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>查看书籍 - {site.name}</title>
+<link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+<link href="<%templateskin%>/css/app.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+<%set DataTable newsList=get_article_list(channel, category_id, pagesize, page, "status=0", out totalcount, out pagelist, "news_list", category_id, "__id__")%>		<%csharp%>
+int countEveryday = totalcount % 28 > 0 ?  totalcount / 28 + 1 : totalcount / 28;
+<%/csharp%>
+<script type="text/javascript" charset="utf-8">
+$(function(){
+
+})
+var everydayCount = parseInt({countEveryday});
+function updateQuantity(count,id){
+	var inputCount = $("."+id);
+	if(count<0){
+		if((parseInt(inputCount.val()) + parseInt(count))>0){
+			inputCount.val(parseInt(inputCount.val()) + parseInt(count));
+		}else{
+			alert("不能再少了")
+		}
+	}else{
+		if((parseInt(inputCount.val()) + parseInt(count))>0){
+			inputCount.val(parseInt(inputCount.val()) + parseInt(count));
+		}
+	}
+	if(id=="booksAllQuantity"){
+		var bookCount = parseInt(inputCount.val()) / 28;
+		$("#booksAllQuantityplan").html("每日整本读"+bookCount+"遍");
+	}else if(id=="booksQuantity"){
+		var bookCount = parseInt(inputCount.val());
+		$("#booksQuantityplan").html("每日分章读"+bookCount+"遍");
+	}
+}
+function createPlan(id) {
+	$("#book").attr("readonly","readonly");
+	$("#allbook").attr("readonly","readonly");
+    var count = 0;
+    var type ="";
+    var user_id = "1";
+	if(id=="book"){
+	    count = $(".booksQuantity").val();
+        type = "chapter";
+	}else if(id=="allbook"){
+        count = $(".booksAllQuantity").val();
+	    type = "book"
+	}
+	$.post("{config.webpath}tools/submit_ajax.ashx?action=create_plan",{count:count,type:type,user_id:user_id,category_id:"{model.id}"},function (data) {
+		var jsonObject = eval("("+data+")");
+		alert(jsonObject.msg);
+		location='calendar.aspx';
+    })
+}
+</script>
+
+
+</head>
+
+<body>
+<div class="page-group">
+	<div id="" class="page page-current">
+		<header class="bar bar-nav">
+			<a class="button button-link button-nav pull-left back" href="news.aspx">
+				<span class="icon icon-left"></span>
+			</a>
+			<h1 class="title">读经计划</h1>
+		</header>
+        <nav class="bar bar-tab">
+            <a class="tab-item external" href="<%linkurl("article_list",1054)%>">
+                <span class="icon icon-home"></span>
+                <span class="tab-label">读经教育理念</span>
+            </a>
+            <a class="tab-item external active" href="<%linkurl("usercenter","index")%>">
+                <span class="icon icon-me"></span>
+                <span class="tab-label">我</span>
+            </a>
+        </nav>
+		<div class="content"><div class="content-padded">
+			<div class="row no-gutter" style="margin-bottom:1rem;">
+				<div class="col-100" style="text-align:center; font-size:.8rem;">
+				<img src="{model.img_url}" class="book_img" style="width:40%; height:auto; margin:0 auto;" />
+				<br />
+				<b>{model.title}</b>
+				</div>
+			</div>
+			
+			<div class="row no-gutter">
+				<div class="col-60" style="font-weight:bold; color:#f60;">分章读计划</div>
+				<div class="col-40" style="text-align:right">
+					<span class="addQuantity" onclick="updateQuantity('-1','booksQuantity');" style="text-align:center;background:#eee;color:#000; padding:0 .5rem;float:left;height:1.2rem;border:1px solid #ccc;border-right:none;">-</span>
+					<input style="width:2rem;text-align:center;float:left;height:1.2rem;border:1px solid #ccc;" class="booksQuantity" name="booksQuantity" type="text" value="1" readonly="readonly" />
+					<span class="removeQuantity" onclick="updateQuantity('1','booksQuantity');" style="text-align:center;background:#eee;color:#000; padding:0 .5rem;float:left;height:1.2rem;border:1px solid #ccc;border-left:none;">+</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-100" id="booksQuantityplan" style="font-size:.7rem;">
+				每日分章读1遍
+				</div>
+			</div>
+			<div class="row" style="font-size:.65rem;">
+				<div class="col-100">
+				说明：《{model.title}》每月28日读完一轮。剩余时间可以补读之前没有完成的计划。
+				</div>
+				<div class="col-100">
+				规则：初始遍数为?遍（每天对应章数完成?遍），即为完成任务。
+				</div>
+				<div class="col-100" style="margin-top:.5rem;">
+					<a href="#" class="button button-big button-fill button-warning" id="book" onclick="createPlan('book')">生成分章读计划</a>
+				</div>
+			</div>
+			<br /><br />
+			<div class="row no-gutter">
+				<div class="col-60" style="font-weight:bold; color:#229073;">整本读计划</div>
+				<div class="col-40" style="text-align:right">
+					<span class="addAllQuantity" onclick="updateQuantity('-28','booksAllQuantity');" style="text-align:center;background:#eee;color:#000; padding:0 .5rem;float:left;height:1.2rem;border:1px solid #ccc;border-right:none;">-</span>
+					<input style="width:2rem;text-align:center;float:left;height:1.2rem;border:1px solid #ccc;" class="booksAllQuantity" name="booksAllQuantity" type="text" value="28" everydayCount="{countEveryday}" readonly />
+					<span class="removeAllQuantity" onclick="updateQuantity('28','booksAllQuantity');" style="text-align:center;background:#eee;color:#000; padding:0 .5rem;float:left;height:1.2rem;border:1px solid #ccc;border-left:none;">+</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-100" id="booksAllQuantityplan" style="font-size:.7rem;">
+				每日整本读1遍
+				</div>
+			</div>
+			<div class="row" style="font-size:.65rem;">
+				<div class="col-100">
+				说明：选择整本读计划，适用于每天有长时间诵读，喜欢正本诵读完成的朋友。
+				</div>
+				<div class="col-100">
+				规则：初始遍数为28遍，即每天一遍。点“+”一次，为56遍，即为每天两遍。
+				</div>
+				<div class="col-100" style="margin-top:.5rem;">
+					<a href="#" class="button button-big button-fill" id="allbook" onclick="createPlan('allbook')">生成整本读计划</a>
+				</div>
+			</div>
+		</div></div>
+	</div>
+</div>
+
+</body>
+</html>

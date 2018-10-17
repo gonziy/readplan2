@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>{model.title} - {site.name}</title>
+    <link rel="stylesheet" href="<%templateskin%>/css/swiper.css" />
+    <link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+    <link href="<%templateskin%>/css/app.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+</head>
+
+<body>
+
+<div class="page-group">
+        <div id="" class="page page-current">
+        <header class="bar bar-nav">
+            <h1 class="title">{model.title}</h1>
+        </header>  
+        <nav class="bar bar-tab">
+            <a class="tab-item external active" href="<%linkurl("article_list",1054)%>">
+                <span class="icon icon-home"></span>
+                <span class="tab-label">读经教育理念</span>
+            </a>
+            <a class="tab-item external" href="wx_login.aspx">
+                <span class="icon icon-me"></span>
+                <span class="tab-label">账户选择</span>
+            </a>
+        </nav>
+        <div class="content">
+            <div class="list-block media-list" style="margin:0;">
+                <ul>
+                    <%set DataTable newsList=get_article_list(channel, category_id, pagesize, page, "status=0", out totalcount, out pagelist, "article_list", category_id, "__id__")%>
+                    <%foreach(DataRow dr in newsList.Rows)%>
+                    <li>
+                        <a href="<%linkurl("article_show",{dr[id]})%>" class="item-link item-content">
+                            <div class="item-media"><img src="{dr[img_url]}" width="80"></div>
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title" style="font-size:.75rem; color:#333;">{dr[title]}</div>
+                                </div>
+                                <div class="item-text" style="font-size:.65rem; color:#999;">{dr[zhaiyao]}</div>
+                            </div>
+                        </a>
+                    </li>
+                    <%/foreach%>
+                </ul>
+                <!--分页页码-->
+                <div class="page-list">{pagelist}</div>
+                <!--/分页页码-->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>支付  - {site.name}</title>
+    <link href="<%templateskin%>/css/sm.css" rel="stylesheet" type="text/css" />
+    <link href="<%templateskin%>/css/app.css?v=2" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" charset="utf-8" src="{config.webpath}scripts/jquery/jquery-1.11.2.min.js"></script>
+
+</head>
+
+<body>
+<div class="page-group">
+	<div id="" class="page page-current">
+		<div id="alertbox" class="content">
+
+				<!--/提交支付-->
+				<%if(action=="succeed")%>
+				    <div class="wrap-box">
+					    <h2>支付成功</h2>
+					    <hr data-am-widget="divider" style="" />
+					    <div class="tip">
+						    <span class="icon check"></span>
+						    <p>^_^，您的订单已经支付成功！</p>
+						<p>您可以点击这里进入<a href='{config.webpath}wx_login.aspx'>账户管理</a>使用读书功能！</p>
+						<p>如有其它问题，请立即与我们客服人员联系。</p>
+				    </div>
+				    <!--/支付成功-->
+                <%else%>
+                    <!--支付失败-->
+                    <div class="wrap-box">
+                        <h2>支付失败</h2>
+                        <hr data-am-widget="divider" style="" />
+                        <div class="tip">
+                            <span class="icon check"></span>
+                            <p>Ծ‸Ծ，您的订单没有支付成功！</p>
+							<p>请立即与我们客服人员联系。</p>
+                        </div>
+                    </div>
+                    <!--/支付失败-->
+				<%/if%>
+
+		</div>
+	</div>
+</div>
+</body>
+</html>
